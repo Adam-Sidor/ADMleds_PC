@@ -21,15 +21,19 @@ def readIPs(filePath):
                 return ipList
     except FileNotFoundError:
         print("File not found!")
+        with open(filePath, 'w') as file:
+            file.write("IP:[]")
+        input("Naciśnij dowolny przycisk, aby kontynuować...")
         return []
 
 while not checkInternetStatus():
     print("Waiting...")
 
-IPs = readIPs("config.txt")
-for IP in IPs:
-    try:
-        print(f"Sending to {IP}")
-        requests.get(f"http://{IP}/status=1", timeout=5)
-    except requests.ConnectionError:
-        pass  #ESP32 does not sending data back
+IPs = readIPs("C:\\Users\\Adam\\Documents\\ADMleds_PC\\config.txt") #You should set own file path
+if IPs:
+    for IP in IPs:
+        try:
+            print(f"Sending to {IP}")
+            requests.get(f"http://{IP}/status=1", timeout=5)
+        except requests.ConnectionError:
+            pass  #ESP32 does not sending data back
